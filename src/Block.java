@@ -27,9 +27,23 @@ public class Block extends Rectangle
     }
 
     public void move(){
+
+        super.x += xVelocity;
+        super.y += yVelocity;
+
+        //Check for collision with the walls, X
+        if(super.x < 0 || (super.x + super.width) > Board.BOARD_WIDTH){
+            super.x = 0;
+        }
+
+        //Check for collision with the walls, Y
+        if(super.y < 0|| (super.y + super.height) > Board.BOARD_HEIGHT){
+            super.y = 0;
+        }
+
     }
 
-    public boolean didCollide(){
+    public boolean didCollideWBlock(){
         return false;
     }
 

@@ -3,6 +3,8 @@
  */
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -10,6 +12,7 @@ public class Board extends JFrame{
 
     public static final int BOARD_WIDTH = 1000;
     public static final int BOARD_HEIGHT = 800;
+
 
     //Constructor
     public Board(){
@@ -19,7 +22,9 @@ public class Board extends JFrame{
         super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         super.setLocationRelativeTo(null); //This will center the Frame
 
-        this.setUpGame();
+        super.addKeyListener(new ButtonsHandler());
+
+        setUpGame();
 
         super.setVisible(true);
     }
@@ -38,6 +43,35 @@ public class Board extends JFrame{
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
         executor.scheduleAtFixedRate(new RepaintTheBoard(this), 0, 20, TimeUnit.MILLISECONDS);
 
+    }
+
+    //This class will handle all of my button clicks
+    //Will be for W/A/D
+    private class ButtonsHandler implements KeyListener{
+
+        @Override
+        public void keyTyped(KeyEvent e){}
+
+        @Override
+        public void keyReleased(KeyEvent e){}
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+
+            //W and Up arrow
+            if(e.getKeyCode() == 87 || e.getKeyCode() == 38){
+                System.out.println("Up");
+            }
+
+            if(e.getKeyCode() == 65 || e.getKeyCode() == 37){ //A and Left arrow
+                System.out.println("Left");
+            }
+
+            if(e.getKeyCode() == 68 || e.getKeyCode() == 39){ //D and Right arrow
+                System.out.println("Right");
+            }
+
+        }
     }
 }
 
@@ -63,8 +97,12 @@ class GameDrawingPanel extends JPanel {
     //Constructor
     GameDrawingPanel(){
 
+        //Start from center screen
+        int startingXPos = Board.BOARD_WIDTH / 2;
+        int startingYPos = Board.BOARD_HEIGHT / 2;
+
         //Add the initial block
-        snake.appendBlock(new Block(0, 0, 30, 0, 0));
+        snake.appendBlock(new Block(startingXPos, startingYPos, 20, 1, 0));
     }
 
     @Override
@@ -88,7 +126,7 @@ class GameDrawingPanel extends JPanel {
 
             graphicSettings.draw(ptr.getBlock());
 
+            ptr.getBlock().move();
         }
     }
-
 }
