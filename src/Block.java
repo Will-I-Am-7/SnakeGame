@@ -5,11 +5,8 @@ import java.awt.Rectangle;
 
 public class Block extends Rectangle
 {
-    private int uLeftXPos;
-    private int uLeftYPos;
     private int xVelocity;
     private int yVelocity;
-    private int sideLength;
     private int startXPos;
     private int startYPos;
 
@@ -22,11 +19,7 @@ public class Block extends Rectangle
         this.startXPos = startXPos;
         this.startYPos = startYPos;
 
-        this.sideLength = sideLength;
-
         //For now these will have the same values
-        uLeftXPos = startXPos;
-        uLeftYPos = startYPos;
 
         this.xVelocity = xVelocity;
         this.yVelocity = yVelocity;
@@ -34,7 +27,6 @@ public class Block extends Rectangle
     }
 
     public void move(){
-
     }
 
     public boolean didCollide(){
@@ -42,13 +34,13 @@ public class Block extends Rectangle
     }
 
     //All the getter and setter methods
-    public int getULeftXPos() { return uLeftXPos; }
+    public int getULeftXPos() { return super.x; }
 
-    public void setULeftXPos(int uLeftXPos) { this.uLeftXPos = uLeftXPos; }
+    public void setULeftXPos(int uLeftXPos) { super.x = uLeftXPos; }
 
-    public int getULeftYPos() { return uLeftYPos; }
+    public int getULeftYPos() { return super.y; }
 
-    public void setULeftYPos(int uLeftYPos) { this.uLeftYPos = uLeftYPos; }
+    public void setULeftYPos(int uLeftYPos) { this.y = uLeftYPos; }
 
     public int getXVelocity() { return xVelocity; }
 
@@ -58,9 +50,9 @@ public class Block extends Rectangle
 
     public void setYVelocity(int yVelocity) { this.yVelocity = yVelocity; }
 
-    public int getSideLength() { return sideLength; }
+    public int getSideLength() { return super.width; }
 
-    public void setSideLength(int sideLength) { this.sideLength = sideLength; }
+    public void setSideLength(int sideLength) { this.width = sideLength; this.height = sideLength;}
 
     public int getStartXPos() { return startXPos; }
 
