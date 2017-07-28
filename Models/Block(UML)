@@ -1,0 +1,16 @@
+Block (extends Rectangle)
+
+(Lots of blocks will make up the snake)
+(The block will be a square)
+
+uLeftXPos   : integer
+uLeftYPos   : integer
+xVelocity   : integer
+yVelocity   : integer
+sideLength  : integer   (We don't need width and height because it is a square)
+startXPos   : integer
+startYPos   : integer
+
+Block(sideLength : integer, startXPos, startYPos) : void
+move() : void
+didCollide() : boolean
