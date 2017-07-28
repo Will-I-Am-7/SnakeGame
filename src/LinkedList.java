@@ -7,11 +7,12 @@ public class LinkedList{
 
     private Node head;
     private Node tail;
+    private int countNodes = 0;
 
     //Will add the block to the tail of the list
     public void appendBlock(Block theBlock){
 
-        Node newNode = new Node(theBlock, head);
+        Node newNode = new Node(theBlock, null);
 
         if(this.isEmpty())
             head = newNode;
@@ -19,6 +20,8 @@ public class LinkedList{
             tail.next = newNode;
 
         tail = newNode;
+
+        countNodes++;
     }
 
     //Will add the block to the head of the list
@@ -31,6 +34,7 @@ public class LinkedList{
 
         head = newNode;
 
+        countNodes++;
     }
 
     //If the head is null, the list must be empty
@@ -40,11 +44,11 @@ public class LinkedList{
 
     //Get the block from the head node
     public Block getFirst(){
-        return head.getBlock();
+        return head.block;
     }
 
     public Block getLast(){
-        return tail.getBlock();
+        return tail.block;
     }
 
     //Simply clears the linked list by removing any references
@@ -53,21 +57,34 @@ public class LinkedList{
         tail = null;
     }
 
+    public Node getHead(){
+        return head;
+    }
+
+    public Node getTail(){
+        return tail;
+    }
+
+    public int getNumNodes(){
+        return countNodes;
+    }
+
     //I want only the LinkedList class to access the Node class, hench all private
-    private class Node{
+    class Node{
+
         private Block block;
         private Node next;
 
-        private Node(Block block, Node next){
+        Node(Block block, Node next){
             this.block = block;
             this.next = next;
         }
 
-        private Block getBlock(){
+        Block getBlock(){
             return block;
         }
 
-        private Node getNext(){
+        Node getNext(){
             return next;
         }
     }
