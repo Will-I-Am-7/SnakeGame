@@ -5,14 +5,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Random;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class Board extends JFrame{
 
-    public static final int BOARD_WIDTH = 1000;
-    public static final int BOARD_HEIGHT = 800;
+    public static final int BOARD_WIDTH = 600;
+    public static final int BOARD_HEIGHT = 400;
 
     public static int lastPressedKeyCode = -1;
 
@@ -20,27 +19,28 @@ public class Board extends JFrame{
     //Constructor
     public Board(){
 
-        super.setTitle("Snake Game");
-        super.setSize(BOARD_WIDTH, BOARD_HEIGHT);
-        super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        super.setLocationRelativeTo(null); //This will center the Frame
+        //Add the panel to JFrame
+        add(new GameDrawingPanel());
+        setResizable(false);
+        pack();
 
-        super.addKeyListener(new ButtonsHandler());
+        setTitle("Snake Game");
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); //This will center the Frame
+        setBackground(Color.BLACK);
 
-        setUpGame();
+        addKeyListener(new ButtonsHandler());
 
-        super.setVisible(true);
+        setUpThreads();
     }
 
     //The main method will just create a new instance of Board
     public static void main(String[] args) {
-        new Board();
+        Board gameBoard = new Board();
+        gameBoard.setVisible(true);
     }
 
-    private void setUpGame(){
-
-        //Add the panel to JFrame
-        super.add(new GameDrawingPanel(), BorderLayout.CENTER);
+    private void setUpThreads(){
 
         //Set up the thread pool that will run every 20 milliseconds, repainting the Board
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
@@ -98,15 +98,16 @@ class RepaintTheBoard implements Runnable{
 
 class GameDrawingPanel extends JPanel {
 
-    //Wil use it to randomly generate numbers
-    Random randNumGenerator = new Random();
+    private int foodSize = 15;
 
     private LinkedList snake = new LinkedList(); //List of blocks that will make a snake
-    private Block food = new Block(randNumGenerator.nextInt(Board.BOARD_WIDTH), randNumGenerator.nextInt(Board.BOARD_HEIGHT) , 10, 0, 0); //The food item, also of type block
-
+    private Block food = new Block(Block.generateXPosFood(foodSize, -1), Block.generateYPosFood(foodSize, -1) , foodSize, 0, 0); //The food item, also of type block
 
     //Constructor
     GameDrawingPanel(){
+
+        setPreferredSize(new Dimension(Board.BOARD_WIDTH, Board.BOARD_HEIGHT));
+        setDoubleBuffered(true);
 
         //Start from center/bottom screen
         int startingXPos = Board.BOARD_WIDTH / 2;
@@ -117,14 +118,9 @@ class GameDrawingPanel extends JPanel {
     }
 
     @Override
-    public void paint(Graphics g){
+    public void paintComponent(Graphics g){
 
         Graphics2D graphicSettings = (Graphics2D)g;
-
-        graphicSettings.setColor(Color.BLACK);
-
-        //Draws a black background as big as the board
-        graphicSettings.fillRect(0, 0, getWidth(), getHeight());
 
         //The rendering rules
         graphicSettings.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -189,8 +185,8 @@ class GameDrawingPanel extends JPanel {
         //Check to see if the snake eats the food
         //We only have to check the 'Head' of the snake for collision with the food block
         if(Block.didEat(snake.getFirst(), food)){
-            food.setULeftXPos(randNumGenerator.nextInt(Board.BOARD_WIDTH));
-            food.setULeftYPos(randNumGenerator.nextInt(Board.BOARD_HEIGHT));
+            food.setULeftXPos(Block.generateXPosFood(foodSize, snake.getFirst().getULeftXPos()));
+            food.setULeftYPos(Block.generateYPosFood(foodSize, snake.getFirst().getULeftYPos()));
         }
     }
 }
