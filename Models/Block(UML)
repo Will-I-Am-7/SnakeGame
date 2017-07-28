@@ -14,3 +14,4 @@ startYPos   : integer
 Block(sideLength : integer, startXPos, startYPos) : void
 move() : void
 didCollide() : boolean
+setter and getter methods for all of the fields
