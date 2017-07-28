@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Random;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -12,6 +13,8 @@ public class Board extends JFrame{
 
     public static final int BOARD_WIDTH = 1000;
     public static final int BOARD_HEIGHT = 800;
+
+    public static int lastPressedKeyCode = -1;
 
 
     //Constructor
@@ -58,17 +61,20 @@ public class Board extends JFrame{
         @Override
         public void keyPressed(KeyEvent e) {
 
-            //W and Up arrow
-            if(e.getKeyCode() == 87 || e.getKeyCode() == 38){
-                System.out.println("Up");
+            if(e.getKeyCode() == 87 || e.getKeyCode() == 38){//W and Up arrow
+                lastPressedKeyCode = 87;
+            }
+
+            if(e.getKeyCode() == 83 || e.getKeyCode() == 40){//S and Down arrow
+                lastPressedKeyCode = 83;
             }
 
             if(e.getKeyCode() == 65 || e.getKeyCode() == 37){ //A and Left arrow
-                System.out.println("Left");
+                lastPressedKeyCode = 65;
             }
 
             if(e.getKeyCode() == 68 || e.getKeyCode() == 39){ //D and Right arrow
-                System.out.println("Right");
+                lastPressedKeyCode = 68;
             }
 
         }
@@ -92,17 +98,22 @@ class RepaintTheBoard implements Runnable{
 
 class GameDrawingPanel extends JPanel {
 
-    private LinkedList snake = new LinkedList();
+    //Wil use it to randomly generate numbers
+    Random randNumGenerator = new Random();
+
+    private LinkedList snake = new LinkedList(); //List of blocks that will make a snake
+    private Block food = new Block(randNumGenerator.nextInt(Board.BOARD_WIDTH), randNumGenerator.nextInt(Board.BOARD_HEIGHT) , 10, 0, 0); //The food item, also of type block
+
 
     //Constructor
     GameDrawingPanel(){
 
-        //Start from center screen
+        //Start from center/bottom screen
         int startingXPos = Board.BOARD_WIDTH / 2;
-        int startingYPos = Board.BOARD_HEIGHT / 2;
+        int startingYPos = Board.BOARD_HEIGHT - 20;
 
         //Add the initial block
-        snake.appendBlock(new Block(startingXPos, startingYPos, 20, 1, 0));
+        snake.appendBlock(new Block(startingXPos, startingYPos, 20, 0, -Block.BASE_VELOCITY));
     }
 
     @Override
@@ -119,6 +130,11 @@ class GameDrawingPanel extends JPanel {
         graphicSettings.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         //The color my snake will be drawn at
+        graphicSettings.setPaint(Color.RED);
+
+        //Draw the food
+        graphicSettings.fillRect(food.getULeftXPos(), food.getULeftYPos(), food.getSideLength(), food.getSideLength());
+
         graphicSettings.setPaint(Color.WHITE);
 
         //Loop through the linkedList to draw the blocks
@@ -126,7 +142,55 @@ class GameDrawingPanel extends JPanel {
 
             graphicSettings.draw(ptr.getBlock());
 
+            if(Board.lastPressedKeyCode == 87){
+
+                int tempYVelocity = ptr.getBlock().getYVelocity();
+
+                if(tempYVelocity == 0) {
+                    ptr.getBlock().setYVelocity(-Block.BASE_VELOCITY);
+                    ptr.getBlock().setXVelocity(0);
+                }
+
+            }
+            if(Board.lastPressedKeyCode == 83){
+
+                int tempYVelocity = ptr.getBlock().getYVelocity();
+
+                if(tempYVelocity == 0) {
+                    ptr.getBlock().setYVelocity(Block.BASE_VELOCITY);
+                    ptr.getBlock().setXVelocity(0);
+                }
+
+            }
+            if(Board.lastPressedKeyCode == 65){
+
+                int tempXVelocity = ptr.getBlock().getXVelocity();
+
+                if(tempXVelocity == 0) {
+                    ptr.getBlock().setXVelocity(-Block.BASE_VELOCITY);
+                    ptr.getBlock().setYVelocity(0);
+                }
+
+            }
+            if(Board.lastPressedKeyCode == 68){
+
+                int tempXVelocity = ptr.getBlock().getXVelocity();
+
+                if(tempXVelocity == 0) {
+                    ptr.getBlock().setXVelocity(+Block.BASE_VELOCITY);
+                    ptr.getBlock().setYVelocity(0);
+                }
+
+            }
+
             ptr.getBlock().move();
+        }
+
+        //Check to see if the snake eats the food
+        //We only have to check the 'Head' of the snake for collision with the food block
+        if(Block.didEat(snake.getFirst(), food)){
+            food.setULeftXPos(randNumGenerator.nextInt(Board.BOARD_WIDTH));
+            food.setULeftYPos(randNumGenerator.nextInt(Board.BOARD_HEIGHT));
         }
     }
 }

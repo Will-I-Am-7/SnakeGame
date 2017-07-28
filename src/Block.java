@@ -10,6 +10,9 @@ public class Block extends Rectangle
     private int startXPos;
     private int startYPos;
 
+    //The base X and Y velocity that will not change
+    public static final int BASE_VELOCITY = 4;
+
     //Constructor, all initial values will be sent over
     public Block(int startXPos, int startYPos, int sideLength, int xVelocity, int yVelocity){
 
@@ -43,8 +46,9 @@ public class Block extends Rectangle
 
     }
 
-    public boolean didCollideWBlock(){
-        return false;
+    //Checks if a Snake block collided with the Food block
+    public static boolean didEat(Block snakeBlock, Block foodBlock){
+        return snakeBlock.intersects(foodBlock);
     }
 
     //All the getter and setter methods
