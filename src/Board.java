@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Board extends JFrame{
 
-    public static final int BOARD_WIDTH = 600;
-    public static final int BOARD_HEIGHT = 400;
+    public static final int BOARD_WIDTH = 800;
+    public static final int BOARD_HEIGHT = 600;
 
     public static int lastPressedKeyCode = -1;
 
@@ -99,6 +99,7 @@ class RepaintTheBoard implements Runnable{
 class GameDrawingPanel extends JPanel {
 
     private int foodSize = 15;
+    private int snakeBlockSize = 20;
 
     private LinkedList snake = new LinkedList(); //List of blocks that will make a snake
     private Block food = new Block(Block.generateXPosFood(foodSize, -1), Block.generateYPosFood(foodSize, -1) , foodSize, 0, 0); //The food item, also of type block
@@ -111,10 +112,10 @@ class GameDrawingPanel extends JPanel {
 
         //Start from center/bottom screen
         int startingXPos = Board.BOARD_WIDTH / 2;
-        int startingYPos = Board.BOARD_HEIGHT - 20;
+        int startingYPos = Board.BOARD_HEIGHT - snakeBlockSize;
 
         //Add the initial block
-        snake.appendBlock(new Block(startingXPos, startingYPos, 20, 0, -Block.BASE_VELOCITY));
+        snake.appendBlock(new Block(startingXPos, startingYPos, snakeBlockSize, 0, -Block.BASE_VELOCITY));
     }
 
     @Override
@@ -187,6 +188,37 @@ class GameDrawingPanel extends JPanel {
         if(Block.didEat(snake.getFirst(), food)){
             food.setULeftXPos(Block.generateXPosFood(foodSize, snake.getFirst().getULeftXPos()));
             food.setULeftYPos(Block.generateYPosFood(foodSize, snake.getFirst().getULeftYPos()));
+
+            //Add the new block
+            addBlockToSnake();
         }
+    }
+
+    //Will create and add a new to block to the linked list
+    private void addBlockToSnake(){
+
+        int startX = snake.getLast().getULeftXPos();
+        int startY = snake.getLast().getULeftYPos();
+
+        int startXVel = snake.getLast().getXVelocity();
+        int startYVel = snake.getLast().getYVelocity();
+
+        //See in what direction the snake is moving
+        //To know where I should add the block
+        if(startYVel < 0){
+            startY+=snakeBlockSize;
+        }
+        else if(startYVel > 0){
+            startY-=snakeBlockSize;
+        }
+        if(startXVel < 0){
+            startX+=snakeBlockSize;
+        }
+        else if(startXVel > 0){
+            startX-=snakeBlockSize;
+        }
+
+        Block tailBlock = new Block(startX, startY, snakeBlockSize, startXVel, startYVel);
+        snake.appendBlock(tailBlock);
     }
 }
