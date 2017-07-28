@@ -69,7 +69,7 @@ public class LinkedList{
         return countNodes;
     }
 
-    //I want only the LinkedList class to access the Node class, hench all private
+    //Node inner class
     class Node{
 
         private Block block;
