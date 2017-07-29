@@ -13,6 +13,8 @@ public class Block extends Rectangle
 
     //The base X and Y velocity that will not change
     public static final int BASE_VELOCITY = 5;
+    public static final int BLOCK_SIZE = 20;
+    public static final int FOOD_SIZE = 15;
 
     private static Random randNumGenerator;
 

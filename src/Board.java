@@ -14,6 +14,7 @@ public class Board extends JFrame{
     public static final int BOARD_HEIGHT = 600;
 
     public static int lastPressedKeyCode = -1;
+    public static Snake theSnake = new Snake();
 
 
     //Constructor
