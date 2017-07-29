@@ -17,6 +17,59 @@ public class Snake{
         blocksArray.add(new Block(startingXPos, startingYPos, Block.BLOCK_SIZE, 0, -Block.BASE_VELOCITY));
     }
 
+    public void move(){
+
+        if(blocksArray.size() > 1){
+            for(int i = blocksArray.size() - 1; i > 0; i--){
+                blocksArray.set(i, blocksArray.get(i - 1));
+            }
+        }
+
+
+        if(Board.lastPressedKeyCode == 87){
+
+            int tempYVelocity = blocksArray.get(0).getYVelocity();
+
+            if(tempYVelocity == 0) {
+                blocksArray.get(0).setYVelocity(-Block.BASE_VELOCITY);
+                blocksArray.get(0).setXVelocity(0);
+            }
+
+        }
+        if(Board.lastPressedKeyCode == 83){
+
+            int tempYVelocity = blocksArray.get(0).getYVelocity();
+
+            if(tempYVelocity == 0) {
+                blocksArray.get(0).setYVelocity(Block.BASE_VELOCITY);
+                blocksArray.get(0).setXVelocity(0);
+            }
+
+        }
+        if(Board.lastPressedKeyCode == 65){
+
+            int tempXVelocity = blocksArray.get(0).getXVelocity();
+
+            if(tempXVelocity == 0) {
+                blocksArray.get(0).setXVelocity(-Block.BASE_VELOCITY);
+                blocksArray.get(0).setYVelocity(0);
+            }
+
+        }
+        if(Board.lastPressedKeyCode == 68){
+
+            int tempXVelocity = blocksArray.get(0).getXVelocity();
+
+            if(tempXVelocity == 0) {
+                blocksArray.get(0).setXVelocity(+Block.BASE_VELOCITY);
+                blocksArray.get(0).setYVelocity(0);
+            }
+
+        }
+
+        blocksArray.get(0).move();
+    }
+
     public void addBlockToSnake(Block block){
         blocksArray.add(block);
     }
