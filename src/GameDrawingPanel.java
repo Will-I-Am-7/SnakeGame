@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by William Madgwick on 7/29/2017.
@@ -9,7 +10,7 @@ class GameDrawingPanel extends JPanel {
     private int foodSize = 15;
     private int snakeBlockSize = 20;
 
-    private LinkedList snake = new LinkedList(); //List of blocks that will make a snake
+    private ArrayList<Block> snake = new ArrayList<Block>(); //List of blocks that will make a snake
     private Block food = new Block(Block.generateXPosFood(foodSize, -1), Block.generateYPosFood(foodSize, -1) , foodSize, 0, 0); //The food item, also of type block
 
     //Constructor
@@ -23,7 +24,7 @@ class GameDrawingPanel extends JPanel {
         int startingYPos = Board.BOARD_HEIGHT - snakeBlockSize;
 
         //Add the initial block
-        snake.appendBlock(new Block(startingXPos, startingYPos, snakeBlockSize, 0, -Block.BASE_VELOCITY));
+        snake.add(new Block(startingXPos, startingYPos, snakeBlockSize, 0, -Block.BASE_VELOCITY));
     }
 
     @Override
@@ -43,59 +44,59 @@ class GameDrawingPanel extends JPanel {
         graphicSettings.setPaint(Color.WHITE);
 
         //Loop through the linkedList to draw the blocks
-        for(LinkedList.Node ptr = snake.getHead(); ptr != null; ptr = ptr.getNext()){
+        for(Block iterator : snake){
 
-            graphicSettings.draw(ptr.getBlock());
+            graphicSettings.draw(iterator);
 
             if(Board.lastPressedKeyCode == 87){
 
-                int tempYVelocity = ptr.getBlock().getYVelocity();
+                int tempYVelocity = iterator.getYVelocity();
 
                 if(tempYVelocity == 0) {
-                    ptr.getBlock().setYVelocity(-Block.BASE_VELOCITY);
-                    ptr.getBlock().setXVelocity(0);
+                    iterator.setYVelocity(-Block.BASE_VELOCITY);
+                    iterator.setXVelocity(0);
                 }
 
             }
             if(Board.lastPressedKeyCode == 83){
 
-                int tempYVelocity = ptr.getBlock().getYVelocity();
+                int tempYVelocity = iterator.getYVelocity();
 
                 if(tempYVelocity == 0) {
-                    ptr.getBlock().setYVelocity(Block.BASE_VELOCITY);
-                    ptr.getBlock().setXVelocity(0);
+                    iterator.setYVelocity(Block.BASE_VELOCITY);
+                    iterator.setXVelocity(0);
                 }
 
             }
             if(Board.lastPressedKeyCode == 65){
 
-                int tempXVelocity = ptr.getBlock().getXVelocity();
+                int tempXVelocity = iterator.getXVelocity();
 
                 if(tempXVelocity == 0) {
-                    ptr.getBlock().setXVelocity(-Block.BASE_VELOCITY);
-                    ptr.getBlock().setYVelocity(0);
+                    iterator.setXVelocity(-Block.BASE_VELOCITY);
+                    iterator.setYVelocity(0);
                 }
 
             }
             if(Board.lastPressedKeyCode == 68){
 
-                int tempXVelocity = ptr.getBlock().getXVelocity();
+                int tempXVelocity = iterator.getXVelocity();
 
                 if(tempXVelocity == 0) {
-                    ptr.getBlock().setXVelocity(+Block.BASE_VELOCITY);
-                    ptr.getBlock().setYVelocity(0);
+                    iterator.setXVelocity(+Block.BASE_VELOCITY);
+                    iterator.setYVelocity(0);
                 }
 
             }
 
-            ptr.getBlock().move();
+            iterator.move();
         }
 
         //Check to see if the snake eats the food
         //We only have to check the 'Head' of the snake for collision with the food block
-        if(Block.didEat(snake.getFirst(), food)){
-            food.setULeftXPos(Block.generateXPosFood(foodSize, snake.getFirst().getULeftXPos()));
-            food.setULeftYPos(Block.generateYPosFood(foodSize, snake.getFirst().getULeftYPos()));
+        if(Block.didEat(snake.get(0), food)){
+            food.setULeftXPos(Block.generateXPosFood(foodSize, snake.get(0).getULeftXPos()));
+            food.setULeftYPos(Block.generateYPosFood(foodSize, snake.get(0).getULeftYPos()));
 
             //Add the new block
             addBlockToSnake();
@@ -105,11 +106,11 @@ class GameDrawingPanel extends JPanel {
     //Will create and add a new to block to the linked list
     private void addBlockToSnake(){
 
-        int startX = snake.getLast().getULeftXPos();
-        int startY = snake.getLast().getULeftYPos();
+        int startX = snake.get(snake.size() - 1).getULeftXPos();
+        int startY = snake.get(snake.size() - 1).getULeftYPos();
 
-        int startXVel = snake.getLast().getXVelocity();
-        int startYVel = snake.getLast().getYVelocity();
+        int startXVel = snake.get(snake.size() - 1).getXVelocity();
+        int startYVel = snake.get(snake.size() - 1).getYVelocity();
 
         //See in what direction the snake is moving
         //To know where I should add the block
@@ -127,6 +128,6 @@ class GameDrawingPanel extends JPanel {
         }
 
         Block tailBlock = new Block(startX, startY, snakeBlockSize, startXVel, startYVel);
-        snake.appendBlock(tailBlock);
+        snake.add(tailBlock);
     }
 }
