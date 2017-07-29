@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Board extends JFrame{
 
-    public static final int BOARD_WIDTH = 800;
-    public static final int BOARD_HEIGHT = 600;
+    public static final int BOARD_WIDTH = 600;
+    public static final int BOARD_HEIGHT = 400;
 
     public static int lastPressedKeyCode = -1;
 
@@ -44,7 +44,7 @@ public class Board extends JFrame{
 
         //Set up the thread pool that will run every 20 milliseconds, repainting the Board
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
-        executor.scheduleAtFixedRate(new RepaintTheBoard(this), 0, 20, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(new RepaintTheBoard(this), 0, 30, TimeUnit.MILLISECONDS);
 
     }
 

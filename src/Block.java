@@ -2,6 +2,7 @@
  * Created by William Madgwick on 7/28/2017.
  */
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Block extends Rectangle
@@ -12,7 +13,7 @@ public class Block extends Rectangle
     private int startYPos;
 
     //The base X and Y velocity that will not change
-    public static final int BASE_VELOCITY = 5;
+    public static final int BASE_VELOCITY = 8;
     public static final int BLOCK_SIZE = 20;
     public static final int FOOD_SIZE = 15;
 
@@ -40,14 +41,17 @@ public class Block extends Rectangle
         super.y += yVelocity;
 
         //Check for collision with the walls, X
-        if(super.x < 0 || (super.x + super.width) > Board.BOARD_WIDTH){
+        if((super.x + super.width) > Board.BOARD_WIDTH)
             super.x = 0;
-        }
+        if(super.x < 0)
+            super.x = Board.BOARD_WIDTH - BLOCK_SIZE;
+
 
         //Check for collision with the walls, Y
-        if(super.y < 0|| (super.y + super.height) > Board.BOARD_HEIGHT){
+        if((super.y + super.height) > Board.BOARD_HEIGHT)
             super.y = 0;
-        }
+        if(super.y < 0)
+            super.y = Board.BOARD_HEIGHT - BLOCK_SIZE;
 
     }
 
@@ -82,6 +86,19 @@ public class Block extends Rectangle
     //Checks if a Snake block collided with the Food block
     public static boolean didEat(Block snakeBlock, Block foodBlock){
         return snakeBlock.intersects(foodBlock);
+    }
+
+    //See if the food intersects with body of snake
+    //Will only be called when we move the food
+    private static boolean collideFoodBody(ArrayList<Block> blocksToTest, Block foodToTest){
+
+        for(Block ptr : blocksToTest){
+            if(ptr.intersects(foodToTest)){
+                return true;
+            }
+        }
+        return false;
+
     }
 
     //All the getter and setter methods
