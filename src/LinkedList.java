@@ -1,6 +1,6 @@
 /**
  * Created by William Madgwick on 7/28/2017.
- * I am providing my own linked list implementation
+ * I am providing my own double linked list implementation
  * That will store block objects
  */
 public class LinkedList{
@@ -12,14 +12,15 @@ public class LinkedList{
     //Will add the block to the tail of the list
     public void appendBlock(Block theBlock){
 
-        Node newNode = new Node(theBlock, null);
+        Node newNode = new Node(theBlock, null, tail);
 
-        if(this.isEmpty())
-            head = newNode;
-        else
+        if(tail != null)
             tail.next = newNode;
 
         tail = newNode;
+
+        if(head == null)
+            head = newNode;
 
         countNodes++;
     }
@@ -27,19 +28,44 @@ public class LinkedList{
     //Will add the block to the head of the list
     public void prependBlock(Block theBlock){
 
-        Node newNode = new Node(theBlock, head);
+        Node newNode = new Node(theBlock, head, null);
 
-        if(this.isEmpty())
-            tail = newNode;
+        if(head != null)
+            head.previous = newNode;
 
         head = newNode;
+
+        if(tail == null)
+            tail = newNode;
 
         countNodes++;
     }
 
+    public void removeLast(){
+
+        if(countNodes != 0){
+            Node temp = tail;
+            tail = tail.previous;
+            tail.next = null;
+            countNodes--;
+        }
+
+    }
+
+    public void removeFirst(){
+
+        if(countNodes != 0){
+            Node temp = head;
+            head = head.next;
+            head.previous = null;
+            countNodes--;
+        }
+
+    }
+
     //If the head is null, the list must be empty
     public boolean isEmpty(){
-        return head == null;
+        return countNodes == 0;
     }
 
     //Get the block from the head node
@@ -55,6 +81,7 @@ public class LinkedList{
     public void clear(){
         head = null;
         tail = null;
+        countNodes = 0;
     }
 
     public Node getHead(){
@@ -74,10 +101,12 @@ public class LinkedList{
 
         private Block block;
         private Node next;
+        private Node previous;
 
-        Node(Block block, Node next){
+        Node(Block block, Node next, Node previous){
             this.block = block;
             this.next = next;
+            this.previous = previous;
         }
 
         Block getBlock(){
@@ -86,6 +115,10 @@ public class LinkedList{
 
         Node getNext(){
             return next;
+        }
+
+        Node getPrevious(){
+            return previous;
         }
     }
 }
