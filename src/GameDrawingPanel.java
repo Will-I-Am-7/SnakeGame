@@ -40,6 +40,8 @@ class GameDrawingPanel extends JPanel {
 
             if(i == 0){
                 graphicSettings.setPaint(Color.GREEN);
+            }else{
+                graphicSettings.setPaint(Color.WHITE);
             }
             graphicSettings.draw(arrSnake.get(i));
 
@@ -70,16 +72,16 @@ class GameDrawingPanel extends JPanel {
         //See in what direction the snake is moving
         //To know where I should add the block
         if(startYVel < 0){
-            startY+=Block.BLOCK_SIZE;
+            startY+=(Block.BLOCK_SIZE);
         }
         else if(startYVel > 0){
-            startY-=Block.BLOCK_SIZE;
+            startY-=(Block.BLOCK_SIZE);
         }
         if(startXVel < 0){
-            startX+=Block.BLOCK_SIZE;
+            startX+=(Block.BLOCK_SIZE);
         }
         else if(startXVel > 0){
-            startX-=Block.BLOCK_SIZE;
+            startX-=(Block.BLOCK_SIZE);
         }
 
         Block tailBlock = new Block(startX, startY, Block.BLOCK_SIZE, startXVel, startYVel);

@@ -21,7 +21,8 @@ public class Snake{
 
         if(blocksArray.size() > 1){
             for(int i = blocksArray.size() - 1; i > 0; i--){
-                blocksArray.set(i, blocksArray.get(i - 1));
+                blocksArray.get(i).setULeftXPos(blocksArray.get(i - 1).getULeftXPos());
+                blocksArray.get(i).setULeftYPos(blocksArray.get(i - 1).getULeftYPos());
             }
         }
 
