@@ -78,7 +78,6 @@ public class Block extends Rectangle
             for(Block ptr : listToTest){
 
                 if(tempFood.intersects(ptr)){
-                    System.out.println("true");
                     foodInterSnake = true;
                     break;
                 }

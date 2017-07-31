@@ -14,6 +14,7 @@ public class Board extends JFrame{
     public static final int BOARD_HEIGHT = 400;
 
     public static Direction direction = Direction.UP;
+    private static int scheduleRate = 10;
 
 
     //Constructor
@@ -44,7 +45,7 @@ public class Board extends JFrame{
 
         //Set up the thread pool that will run every 20 milliseconds, repainting the Board
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
-        executor.scheduleAtFixedRate(new RepaintTheBoard(this), 0, 60, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(new RepaintTheBoard(this), 0, scheduleRate, TimeUnit.MILLISECONDS);
         
     }
 
@@ -79,11 +80,17 @@ public class Board extends JFrame{
 
         }
     }
+
+    static int getScheduleRate(){ return scheduleRate; }
 }
 
 class RepaintTheBoard implements Runnable{
 
     private Board theBoard;
+
+    //This delay will be used to speed up the game as time passed
+    private int threadDelay = 100;
+    private int countTime = 0;
 
     //Constructor
     RepaintTheBoard(Board board){
@@ -92,6 +99,28 @@ class RepaintTheBoard implements Runnable{
 
     @Override
     public void run(){
+
         theBoard.repaint();
+
+        try{
+
+            Thread.sleep(threadDelay);
+
+        }
+        catch(InterruptedException e) { e.printStackTrace(); }
+
+        //Meaning this is the fastest that the snake will go
+        if(threadDelay > 34){
+
+            //Want to decrement the delay every 10 seconds
+            if(countTime == 100){
+                System.out.println("10 seconds gone");
+                threadDelay--;
+                countTime = 0;
+            }
+
+        }
+
+        countTime++;
     }
 }
