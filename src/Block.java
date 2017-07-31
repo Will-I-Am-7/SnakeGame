@@ -15,7 +15,7 @@ public class Block extends Rectangle
     //The base X and Y velocity that will not change
     public static final int BASE_VELOCITY = 20;
     public static final int BLOCK_SIZE = 20;
-    public static final int FOOD_SIZE = 15;
+    public static final int FOOD_SIZE = 20;
 
     private static Random randNumGenerator;
 
@@ -63,11 +63,14 @@ public class Block extends Rectangle
         randNumGenerator = new Random();
         boolean foodInterSnake = true; //Otherwise we might skip the first iteration of the loop
 
-        int theXPos = randNumGenerator.nextInt(Board.BOARD_WIDTH);
-        int theYPos = randNumGenerator.nextInt(Board.BOARD_HEIGHT);
+        int theXPos = 0;
+        int theYPos = 0;
 
         //Make sure the x and y position are on the screen
         while( ((theXPos + FOOD_SIZE) > Board.BOARD_WIDTH) || ((theYPos + FOOD_SIZE) > Board.BOARD_HEIGHT) || foodInterSnake ){
+
+            theXPos = randNumGenerator.nextInt(Board.BOARD_WIDTH);
+            theYPos = randNumGenerator.nextInt(Board.BOARD_HEIGHT);
 
             Rectangle tempFood = new Rectangle(theXPos, theYPos, FOOD_SIZE, FOOD_SIZE);
 
@@ -85,10 +88,7 @@ public class Block extends Rectangle
 
             }
 
-            theXPos = randNumGenerator.nextInt(Board.BOARD_WIDTH);
-            theYPos = randNumGenerator.nextInt(Board.BOARD_HEIGHT);
         }
-
 
         return new Block(theXPos, theYPos, FOOD_SIZE, 0, 0);
     }

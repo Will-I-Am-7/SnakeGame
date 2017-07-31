@@ -44,7 +44,7 @@ public class Board extends JFrame{
 
         //Set up the thread pool that will run every 20 milliseconds, repainting the Board
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
-        executor.scheduleAtFixedRate(new RepaintTheBoard(this), 0, 80, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(new RepaintTheBoard(this), 0, 40, TimeUnit.MILLISECONDS);
 
     }
 
