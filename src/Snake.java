@@ -78,6 +78,27 @@ public class Snake{
         blocksArray.get(0).move();
     }
 
+    //This method will see if the body of the snake collides of any other part of the snake
+    public boolean collideHeadBody(){
+
+        Block snakeHead = blocksArray.get(0);
+
+        for(Block blocksToTest : blocksArray){
+
+            //The head cannot collide with the head of the snake
+            //Therefore we skip the head of the snake
+
+            if(snakeHead != blocksToTest){
+                if(blocksToTest.intersects(snakeHead))
+                    return true;
+            }
+
+        }
+
+        return false;
+
+    }
+
     //Ads new blocks to the tail of the snake
     public void addBlockToSnake(){
 

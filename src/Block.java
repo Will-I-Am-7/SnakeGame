@@ -13,7 +13,7 @@ public class Block extends Rectangle
     private int startYPos;
 
     //The base X and Y velocity that will not change
-    public static final int BASE_VELOCITY = 8;
+    public static final int BASE_VELOCITY = 20;
     public static final int BLOCK_SIZE = 20;
     public static final int FOOD_SIZE = 15;
 
@@ -55,50 +55,48 @@ public class Block extends Rectangle
 
     }
 
-    //This method will generate a xPos that is on the screen for the food
-    public static int generateXPosFood(int blockSize, int currentSnakeX){
+    //This method will generate a xPos/yPos that is on the screen for the food
+    //Will also make sure that it does not touch the body of the snake
+    //Not working yet
+    public static Block generateFoodPosition(ArrayList<Block> listToTest){
 
         randNumGenerator = new Random();
+        boolean foodInterSnake = true; //Otherwise we might skip the first iteration of the loop
 
         int theXPos = randNumGenerator.nextInt(Board.BOARD_WIDTH);
-
-        while((theXPos + blockSize) > Board.BOARD_WIDTH || theXPos == currentSnakeX){
-            theXPos = randNumGenerator.nextInt(Board.BOARD_WIDTH);
-        }
-
-        return theXPos;
-    }
-
-    //This method will generate a yPos that is on the screen for the food
-    public static int generateYPosFood(int blockSize, int currentSnakeY){
-
-        randNumGenerator = new Random();
-
         int theYPos = randNumGenerator.nextInt(Board.BOARD_HEIGHT);
 
-        while((theYPos + blockSize) > Board.BOARD_HEIGHT || theYPos == currentSnakeY){
+        //Make sure the x and y position are on the screen
+        while( ((theXPos + FOOD_SIZE) > Board.BOARD_WIDTH) || ((theYPos + FOOD_SIZE) > Board.BOARD_HEIGHT) || foodInterSnake ){
+
+            Rectangle tempFood = new Rectangle(theXPos, theYPos, FOOD_SIZE, FOOD_SIZE);
+
+            //See if the food intersects with any of the body of the snake
+            for(Block ptr : listToTest){
+
+                if(tempFood.intersects(ptr)){
+                    System.out.println("true");
+                    foodInterSnake = true;
+                    break;
+                }
+                else{
+                    foodInterSnake = false;
+                }
+
+            }
+
+            theXPos = randNumGenerator.nextInt(Board.BOARD_WIDTH);
             theYPos = randNumGenerator.nextInt(Board.BOARD_HEIGHT);
         }
 
-        return theYPos;
+
+        return new Block(theXPos, theYPos, FOOD_SIZE, 0, 0);
     }
+
 
     //Checks if a Snake block collided with the Food block
     public static boolean didEat(Block snakeBlock, Block foodBlock){
         return snakeBlock.intersects(foodBlock);
-    }
-
-    //See if the food intersects with body of snake
-    //Will only be called when we move the food
-    private static boolean collideFoodBody(ArrayList<Block> blocksToTest, Block foodToTest){
-
-        for(Block ptr : blocksToTest){
-            if(ptr.intersects(foodToTest)){
-                return true;
-            }
-        }
-        return false;
-
     }
 
     //All the getter and setter methods

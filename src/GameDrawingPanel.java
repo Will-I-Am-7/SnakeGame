@@ -40,6 +40,28 @@ class GameDrawingPanel extends JPanel {
 
         graphicSettings.setPaint(Color.WHITE);
 
+        //See if the snake runs into itself
+        if(theSnake.collideHeadBody()){
+
+            //Pause for a few seconds
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //Make a new snake
+            theSnake = new Snake();
+            arrSnake = theSnake.getBlocksArray();
+
+            //Reset the food
+            xFood = (int)(Math.random() * (Board.BOARD_WIDTH - Block.BLOCK_SIZE));
+            yFood = (int)(Math.random() * 100);
+
+            food.setULeftXPos(xFood);
+            food.setULeftYPos(yFood);
+        }
+
         //Loop through the arraylist to draw the snake
         for(int i = 0; i < arrSnake.size(); i++){
 
@@ -57,8 +79,9 @@ class GameDrawingPanel extends JPanel {
         //We only have to check the 'Head' of the snake for collision with the food block
         if(Block.didEat(arrSnake.get(0), food)){
 
-            food.setULeftXPos(Block.generateXPosFood(Block.FOOD_SIZE, arrSnake.get(0).getULeftXPos()));
-            food.setULeftYPos(Block.generateYPosFood(Block.FOOD_SIZE, arrSnake.get(0).getULeftYPos()));
+            //Get the new position for the food
+            //We do this by making a new block object and changing the reference from the original food to the new food block
+            food = Block.generateFoodPosition(arrSnake);
 
             //Add the new block
             theSnake.addBlockToSnake();
