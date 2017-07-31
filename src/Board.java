@@ -13,7 +13,7 @@ public class Board extends JFrame{
     public static final int BOARD_WIDTH = 600;
     public static final int BOARD_HEIGHT = 400;
 
-    public static int lastPressedKeyCode = -1;
+    public static Direction direction = Direction.UP;
 
 
     //Constructor
@@ -44,8 +44,8 @@ public class Board extends JFrame{
 
         //Set up the thread pool that will run every 20 milliseconds, repainting the Board
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
-        executor.scheduleAtFixedRate(new RepaintTheBoard(this), 0, 40, TimeUnit.MILLISECONDS);
-
+        executor.scheduleAtFixedRate(new RepaintTheBoard(this), 0, 60, TimeUnit.MILLISECONDS);
+        
     }
 
     //This class will handle all of my button clicks
@@ -62,19 +62,19 @@ public class Board extends JFrame{
         public void keyPressed(KeyEvent e) {
 
             if(e.getKeyCode() == 87 || e.getKeyCode() == 38){//W and Up arrow
-                lastPressedKeyCode = 87;
+                direction = Direction.UP;
             }
 
             if(e.getKeyCode() == 83 || e.getKeyCode() == 40){//S and Down arrow
-                lastPressedKeyCode = 83;
+                direction = Direction.DOWN;
             }
 
             if(e.getKeyCode() == 65 || e.getKeyCode() == 37){ //A and Left arrow
-                lastPressedKeyCode = 65;
+                direction = Direction.LEFT;
             }
 
             if(e.getKeyCode() == 68 || e.getKeyCode() == 39){ //D and Right arrow
-                lastPressedKeyCode = 68;
+                direction = Direction.RIGHT;
             }
 
         }

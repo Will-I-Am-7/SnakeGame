@@ -32,49 +32,65 @@ public class Snake{
             }
         }
 
+        //Handle te direction that comes from key input using my enum Direction
+        switch (Board.direction){
+            case UP:{
 
-        //Handle te direction that comes from key input
-        if(Board.lastPressedKeyCode == 87){
+                int tempYVelocity = blocksArray.get(0).getYVelocity();
 
-            int tempYVelocity = blocksArray.get(0).getYVelocity();
+                if(tempYVelocity == 0) {
+                    blocksArray.get(0).setYVelocity(-Block.BASE_VELOCITY);
+                    blocksArray.get(0).setXVelocity(0);
+                }
+                break;
 
-            if(tempYVelocity == 0) {
-                blocksArray.get(0).setYVelocity(-Block.BASE_VELOCITY);
-                blocksArray.get(0).setXVelocity(0);
             }
+            case DOWN:{
 
-        }
-        if(Board.lastPressedKeyCode == 83){
+                int tempYVelocity = blocksArray.get(0).getYVelocity();
 
-            int tempYVelocity = blocksArray.get(0).getYVelocity();
+                if(tempYVelocity == 0) {
+                    blocksArray.get(0).setYVelocity(Block.BASE_VELOCITY);
+                    blocksArray.get(0).setXVelocity(0);
+                }
+                break;
 
-            if(tempYVelocity == 0) {
-                blocksArray.get(0).setYVelocity(Block.BASE_VELOCITY);
-                blocksArray.get(0).setXVelocity(0);
             }
+            case LEFT:{
 
-        }
-        if(Board.lastPressedKeyCode == 65){
+                int tempXVelocity = blocksArray.get(0).getXVelocity();
 
-            int tempXVelocity = blocksArray.get(0).getXVelocity();
+                if(tempXVelocity == 0) {
+                    blocksArray.get(0).setXVelocity(-Block.BASE_VELOCITY);
+                    blocksArray.get(0).setYVelocity(0);
+                }
+                break;
 
-            if(tempXVelocity == 0) {
-                blocksArray.get(0).setXVelocity(-Block.BASE_VELOCITY);
-                blocksArray.get(0).setYVelocity(0);
             }
+            case RIGHT:{
 
-        }
-        if(Board.lastPressedKeyCode == 68){
+                int tempXVelocity = blocksArray.get(0).getXVelocity();
 
-            int tempXVelocity = blocksArray.get(0).getXVelocity();
+                if(tempXVelocity == 0) {
+                    blocksArray.get(0).setXVelocity(+Block.BASE_VELOCITY);
+                    blocksArray.get(0).setYVelocity(0);
+                }
+                break;
 
-            if(tempXVelocity == 0) {
-                blocksArray.get(0).setXVelocity(+Block.BASE_VELOCITY);
-                blocksArray.get(0).setYVelocity(0);
             }
+            //Will be the same as UP
+            default:{
+                int tempYVelocity = blocksArray.get(0).getYVelocity();
 
+                if(tempYVelocity == 0) {
+                    blocksArray.get(0).setYVelocity(-Block.BASE_VELOCITY);
+                    blocksArray.get(0).setXVelocity(0);
+                }
+                break;
+            }
         }
 
+        //Move the head
         blocksArray.get(0).move();
     }
 
