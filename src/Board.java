@@ -89,7 +89,7 @@ class RepaintTheBoard implements Runnable{
     private Board theBoard;
 
     //This delay will be used to speed up the game as time passed
-    private int threadDelay = 100;
+    private int threadDelay = 100; //0riginal = 100
     private int countTime = 0;
 
     //Constructor
@@ -112,9 +112,10 @@ class RepaintTheBoard implements Runnable{
         //Meaning this is the fastest that the snake will go
         if(threadDelay > 34){
 
-            //Want to decrement the delay every 10 seconds
-            if(countTime == 100){
-                System.out.println("10 seconds gone");
+            //Want to decrement the delay every 4.6 seconds
+            //Meaning takes just about 5min to reach max speed
+            if(countTime == 46){
+                System.out.println(threadDelay);
                 threadDelay--;
                 countTime = 0;
             }
