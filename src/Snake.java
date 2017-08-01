@@ -3,11 +3,11 @@ import java.util.ArrayList;
 /**
  * Created by William Madgwick on 7/29/2017.
  */
-public class Snake{
+class Snake{
 
     private ArrayList<Block> blocksArray = new ArrayList<Block>();
 
-    public Snake(){
+    Snake(){
 
         //Start from center/bottom screen
         int startingXPos = Board.BOARD_WIDTH / 2;
@@ -20,7 +20,7 @@ public class Snake{
 
     //The movement of the snake as a whole
     //Simple algorithm used. Each previous block just gets the x and y positions from the block ontop of it
-    public void move(){
+    void move(){
 
         //The block move up a 'chain'
         if(blocksArray.size() > 1){
@@ -95,7 +95,7 @@ public class Snake{
     }
 
     //This method will see if the body of the snake collides of any other part of the snake
-    public boolean collideHeadBody(){
+    boolean collideHeadBody(){
 
         Block snakeHead = blocksArray.get(0);
 
@@ -116,7 +116,7 @@ public class Snake{
     }
 
     //Ads new blocks to the tail of the snake
-    public void addBlockToSnake(){
+    void addBlockToSnake(){
 
         int startX = blocksArray.get(blocksArray.size() - 1).getULeftXPos();
         int startY = blocksArray.get(blocksArray.size() - 1).getULeftYPos();
@@ -143,6 +143,6 @@ public class Snake{
         blocksArray.add(tailBlock);
     }
 
-    public ArrayList<Block> getBlocksArray() { return blocksArray;}
+    ArrayList<Block> getBlocksArray() { return blocksArray;}
 
 }

@@ -10,15 +10,15 @@ import java.util.concurrent.TimeUnit;
 
 public class Board extends JFrame{
 
-    public static final int BOARD_WIDTH = 600;
-    public static final int BOARD_HEIGHT = 400;
+    static final int BOARD_WIDTH = 600;
+    static final int BOARD_HEIGHT = 400;
 
-    public static Direction direction = Direction.UP;
+    static Direction direction = Direction.UP;
     private static int scheduleRate = 10;
 
 
     //Constructor
-    public Board(){
+    private Board(){
 
         //Add the panel to JFrame
         add(new GameDrawingPanel());

@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Block extends Rectangle
+class Block extends Rectangle
 {
     private int xVelocity;
     private int yVelocity;
@@ -13,11 +13,10 @@ public class Block extends Rectangle
     private int startYPos;
 
     //The base X and Y velocity that will not change
-    public static final int BASE_VELOCITY = 20;
-    public static final int BLOCK_SIZE = 20;
-    public static final int FOOD_SIZE = 20;
+    static final int BASE_VELOCITY = 20;
+    static final int BLOCK_SIZE = 20;
+    static final int FOOD_SIZE = 20;
 
-    private static Random randNumGenerator;
 
     //Constructor, all initial values will be sent over
     public Block(int startXPos, int startYPos, int sideLength, int xVelocity, int yVelocity){
@@ -35,7 +34,7 @@ public class Block extends Rectangle
 
     }
 
-    public void move(){
+    void move(){
 
         super.x += xVelocity;
         super.y += yVelocity;
@@ -57,10 +56,9 @@ public class Block extends Rectangle
 
     //This method will generate a xPos/yPos that is on the screen for the food
     //Will also make sure that it does not touch the body of the snake
-    //Not working yet
-    public static Block generateFoodPosition(ArrayList<Block> listToTest){
+    static Block generateFoodPosition(ArrayList<Block> listToTest){
 
-        randNumGenerator = new Random();
+        Random randNumGenerator = new Random();
         boolean foodInterSnake = true; //Otherwise we might skip the first iteration of the loop
 
         int theXPos = 0;
@@ -94,28 +92,28 @@ public class Block extends Rectangle
 
 
     //Checks if a Snake block collided with the Food block
-    public static boolean didEat(Block snakeBlock, Block foodBlock){
+    static boolean didEat(Block snakeBlock, Block foodBlock){
         return snakeBlock.intersects(foodBlock);
     }
 
     //All the getter and setter methods
-    public int getULeftXPos() { return super.x; }
+    int getULeftXPos() { return super.x; }
 
-    public void setULeftXPos(int uLeftXPos) { super.x = uLeftXPos; }
+    void setULeftXPos(int uLeftXPos) { super.x = uLeftXPos; }
 
-    public int getULeftYPos() { return super.y; }
+    int getULeftYPos() { return super.y; }
 
-    public void setULeftYPos(int uLeftYPos) { this.y = uLeftYPos; }
+    void setULeftYPos(int uLeftYPos) { this.y = uLeftYPos; }
 
-    public int getXVelocity() { return xVelocity; }
+    int getXVelocity() { return xVelocity; }
 
-    public void setXVelocity(int xVelocity) { this.xVelocity = xVelocity; }
+    void setXVelocity(int xVelocity) { this.xVelocity = xVelocity; }
 
-    public int getYVelocity() { return yVelocity; }
+    int getYVelocity() { return yVelocity; }
 
-    public void setYVelocity(int yVelocity) { this.yVelocity = yVelocity; }
+    void setYVelocity(int yVelocity) { this.yVelocity = yVelocity; }
 
-    public int getSideLength() { return super.width; }
+    int getSideLength() { return super.width; }
 
     public void setSideLength(int sideLength) { this.width = sideLength; this.height = sideLength;}
 
