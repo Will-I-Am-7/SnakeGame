@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -15,6 +16,7 @@ public class Board extends JFrame{
 
     static Direction direction = Direction.UP;
     private static int scheduleRate = 10;
+    private static Player player;
 
 
     //Constructor
@@ -37,8 +39,37 @@ public class Board extends JFrame{
 
     //The main method will just create a new instance of Board
     public static void main(String[] args) {
+
+        //If the file does not exist, display the input dialog
+        if(! new File(Player.FileHandler.FILE_PATH).exists()){
+            initializeFirstTimePlayer();
+        }
+        else {
+            player = new Player();
+        }
+
         Board gameBoard = new Board();
         gameBoard.setVisible(true);
+
+    }
+
+    //This method will display a custom JOptionPane the first time the user runs the software
+    private static void initializeFirstTimePlayer(){
+
+        UIManager UI=new UIManager();
+        UI.put("OptionPane.background", Color.BLACK);
+        UI.put("Panel.background", new Color(34,139,34));
+
+        String name = JOptionPane.showInputDialog("Please enter your name", "NAME");
+
+        //If the user leaves it blank for some reason
+        if(name.trim().length() < 1){
+            name = "Snaky";
+        }
+
+        //Create player object
+        player = new Player(name, 0, 0);
+        player.savePlayerInfo();
     }
 
     private void setUpThreads(){
@@ -115,7 +146,6 @@ class RepaintTheBoard implements Runnable{
             //Want to decrement the delay every 4.6 seconds
             //Meaning takes just about 5min to reach max speed
             if(countTime == 46){
-                System.out.println(threadDelay);
                 threadDelay--;
                 countTime = 0;
             }
