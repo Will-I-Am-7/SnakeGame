@@ -7,20 +7,27 @@ import java.util.ArrayList;
  */
 class GameDrawingPanel extends JPanel {
 
+    static final int BOARD_WIDTH = 600;
+    static final int BOARD_HEIGHT = 400;
+
     private Snake theSnake = new Snake();
     private ArrayList<Block> arrSnake = theSnake.getBlocksArray();
 
     //The x and y values for the first food block to display
-    private int xFood = (int)(Math.random() * (Board.BOARD_WIDTH - Block.BLOCK_SIZE));
+    private int xFood = (int)(Math.random() * (BOARD_WIDTH - Block.BLOCK_SIZE));
     private int yFood = (int)(Math.random() * 100);
 
     private Block food = new Block(xFood, yFood, Block.FOOD_SIZE, 0, 0); //The food item, also of type block
 
-    //Constructor
-    GameDrawingPanel(){
+    //Instance of the top panel, so I can change the score as the player plays
+    private TopPanel pnlScore;
 
-        setPreferredSize(new Dimension(Board.BOARD_WIDTH, Board.BOARD_HEIGHT));
+    //Constructor
+    GameDrawingPanel(TopPanel pnlScore){
+
+        setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
         setDoubleBuffered(true);
+        this.pnlScore = pnlScore;
 
     }
 
@@ -29,11 +36,15 @@ class GameDrawingPanel extends JPanel {
 
         Graphics2D graphicSettings = (Graphics2D)g;
 
+        // Draw a black background that is as big as the game board
+        graphicSettings.setColor(Color.BLACK);
+        graphicSettings.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+
         //The rendering rules
         graphicSettings.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        //The color my snake will be drawn at
-        graphicSettings.setPaint(Color.RED);
+        //The color my food will be drawn at
+        graphicSettings.setPaint(new Color(179, 66, 244));
 
         //Draw the food
         graphicSettings.fillRect(food.getULeftXPos(), food.getULeftYPos(), food.getSideLength(), food.getSideLength());
@@ -55,7 +66,7 @@ class GameDrawingPanel extends JPanel {
             arrSnake = theSnake.getBlocksArray();
 
             //Reset the food
-            xFood = (int)(Math.random() * (Board.BOARD_WIDTH - Block.BLOCK_SIZE));
+            xFood = (int)(Math.random() * (BOARD_WIDTH - Block.BLOCK_SIZE));
             yFood = (int)(Math.random() * 100);
 
             food.setULeftXPos(xFood);
@@ -67,7 +78,7 @@ class GameDrawingPanel extends JPanel {
 
             //Make the head green
             if(i == 0){
-                graphicSettings.setPaint(new Color(34,139,34));
+                graphicSettings.setPaint(Board.THEME_COLOUR);
             }else{
                 graphicSettings.setPaint(Color.WHITE);
             }
@@ -79,6 +90,15 @@ class GameDrawingPanel extends JPanel {
         //We only have to check the 'Head' of the snake for collision with the food block
         if(Block.didEat(arrSnake.get(0), food)){
 
+            //Change the score and display on screen
+            Board.getPlayer().setCurrentScore(Board.getPlayer().getCurrentScore() + 1);
+
+            //See if the score is a high score, then make it the new high score
+            if(Board.getPlayer().getCurrentScore() > Board.getPlayer().getHighScore())
+                Board.getPlayer().setHighScore(Board.getPlayer().getCurrentScore());
+
+            pnlScore.setLabelScore();
+
             //Get the new position for the food
             //We do this by making a new block object and changing the reference from the original food to the new food block
             food = Block.generateFoodPosition(arrSnake);
@@ -89,5 +109,6 @@ class GameDrawingPanel extends JPanel {
 
         theSnake.move();
     }
+
 
 }

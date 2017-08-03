@@ -10,8 +10,8 @@ class Snake{
     Snake(){
 
         //Start from center/bottom screen
-        int startingXPos = Board.BOARD_WIDTH / 2;
-        int startingYPos = Board.BOARD_HEIGHT - Block.BLOCK_SIZE;
+        int startingXPos = GameDrawingPanel.BOARD_WIDTH / 2;
+        int startingYPos = GameDrawingPanel.BOARD_HEIGHT - Block.BLOCK_SIZE;
 
         //Add the initial block or head of the snake, size 2
         blocksArray.add(new Block(startingXPos - Block.BLOCK_SIZE, startingYPos - Block.BLOCK_SIZE, Block.BLOCK_SIZE, 0, -Block.BASE_VELOCITY));

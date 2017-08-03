@@ -5,32 +5,55 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class Board extends JFrame{
 
-    static final int BOARD_WIDTH = 600;
-    static final int BOARD_HEIGHT = 400;
-
     static Direction direction = Direction.UP;
     private static int scheduleRate = 10;
     private static Player player;
+    static final Color THEME_COLOUR = Color.decode("#006699");
+    private TopPanel pnlTop;
+    private GameDrawingPanel pnlGameBoard;
 
 
     //Constructor
     private Board(){
 
-        //Add the panel to JFrame
-        add(new GameDrawingPanel());
+        pnlTop = new TopPanel();
+        pnlGameBoard = new GameDrawingPanel(pnlTop);
+
+        //Add the panels to JFrame
+        add(pnlGameBoard, BorderLayout.CENTER);
+        add(pnlTop, BorderLayout.NORTH);
         setResizable(false);
         pack();
 
         setTitle("Snake Game");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); //This will center the Frame
-        setBackground(Color.BLACK);
+
+        //Set up the closing action of the board
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (JOptionPane.showConfirmDialog(null,
+                        "Are you sure to exit?", "Really Closing?",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION)
+                {
+                    //First I want to save the data
+                    player.savePlayerInfo();
+
+                    //Then exit
+                    System.exit(0);
+                }
+            }
+        });
 
         addKeyListener(new ButtonsHandler());
 
@@ -58,7 +81,7 @@ public class Board extends JFrame{
 
         UIManager UI=new UIManager();
         UI.put("OptionPane.background", Color.BLACK);
-        UI.put("Panel.background", new Color(34,139,34));
+        UI.put("Panel.background", THEME_COLOUR);
 
         String name = JOptionPane.showInputDialog("Please enter your name", "NAME");
 
@@ -113,6 +136,10 @@ public class Board extends JFrame{
     }
 
     static int getScheduleRate(){ return scheduleRate; }
+
+    static Player getPlayer(){
+        return player;
+    }
 }
 
 class RepaintTheBoard implements Runnable{

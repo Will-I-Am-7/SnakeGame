@@ -1,9 +1,5 @@
-import com.sun.xml.internal.fastinfoset.algorithm.IntegerEncodingAlgorithm;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-
 import javax.swing.*;
 import java.io.*;
-import java.util.Scanner;
 
 /**
  * Created by William Madgwick on 8/1/2017.
@@ -26,11 +22,12 @@ class Player {
 
     }
 
-    //Default constructor
+    //Other constructor
     //This will only be called when it is NOT the first time the player plays
     Player() {
 
         fileHandler = new FileHandler();
+        currentScore = 0;
 
         try {
             fileHandler.readFromFile();
@@ -69,7 +66,7 @@ class Player {
 
         private File theFile;
         public static final String FILE_PATH = "Resources//userdata.txt";
-        public static final String ICON_PATH = "Resources//snake.gif";
+        public static final String ICON_PATH = "Resources//snake2.png";
 
         //First check if the file exists
         private FileHandler(){

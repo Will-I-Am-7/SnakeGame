@@ -40,17 +40,17 @@ class Block extends Rectangle
         super.y += yVelocity;
 
         //Check for collision with the walls, X
-        if((super.x + super.width) > Board.BOARD_WIDTH)
+        if((super.x + super.width) > GameDrawingPanel.BOARD_WIDTH)
             super.x = 0;
         if(super.x < 0)
-            super.x = Board.BOARD_WIDTH - BLOCK_SIZE;
+            super.x = GameDrawingPanel.BOARD_WIDTH - BLOCK_SIZE;
 
 
         //Check for collision with the walls, Y
-        if((super.y + super.height) > Board.BOARD_HEIGHT)
+        if((super.y + super.height) > GameDrawingPanel.BOARD_HEIGHT)
             super.y = 0;
         if(super.y < 0)
-            super.y = Board.BOARD_HEIGHT - BLOCK_SIZE;
+            super.y = GameDrawingPanel.BOARD_HEIGHT - BLOCK_SIZE;
 
     }
 
@@ -65,10 +65,10 @@ class Block extends Rectangle
         int theYPos = 0;
 
         //Make sure the x and y position are on the screen
-        while( ((theXPos + FOOD_SIZE) > Board.BOARD_WIDTH) || ((theYPos + FOOD_SIZE) > Board.BOARD_HEIGHT) || foodInterSnake ){
+        while( ((theXPos + FOOD_SIZE) > GameDrawingPanel.BOARD_WIDTH) || ((theYPos + FOOD_SIZE) > GameDrawingPanel.BOARD_HEIGHT) || foodInterSnake ){
 
-            theXPos = randNumGenerator.nextInt(Board.BOARD_WIDTH);
-            theYPos = randNumGenerator.nextInt(Board.BOARD_HEIGHT);
+            theXPos = randNumGenerator.nextInt(GameDrawingPanel.BOARD_WIDTH);
+            theYPos = randNumGenerator.nextInt(GameDrawingPanel.BOARD_HEIGHT);
 
             Rectangle tempFood = new Rectangle(theXPos, theYPos, FOOD_SIZE, FOOD_SIZE);
 
