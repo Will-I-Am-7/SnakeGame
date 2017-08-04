@@ -14,11 +14,13 @@ import java.util.concurrent.TimeUnit;
 public class Board extends JFrame{
 
     static Direction direction = Direction.UP;
+    static GameState gameState;
     private static int scheduleRate = 10;
     private static Player player;
     static final Color THEME_COLOUR = Color.decode("#006699");
     private TopPanel pnlTop;
     private GameDrawingPanel pnlGameBoard;
+    private ScheduledThreadPoolExecutor executor;
 
 
     //Constructor
@@ -63,6 +65,8 @@ public class Board extends JFrame{
     //The main method will just create a new instance of Board
     public static void main(String[] args) {
 
+        gameState = GameState.PLAYING;
+
         //If the file does not exist, display the input dialog
         if(! new File(Player.FileHandler.FILE_PATH).exists()){
             initializeFirstTimePlayer();
@@ -98,7 +102,7 @@ public class Board extends JFrame{
     private void setUpThreads(){
 
         //Set up the thread pool that will run every 20 milliseconds, repainting the Board
-        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
+        executor = new ScheduledThreadPoolExecutor(5);
         executor.scheduleAtFixedRate(new RepaintTheBoard(this), 0, scheduleRate, TimeUnit.MILLISECONDS);
         
     }
@@ -132,6 +136,15 @@ public class Board extends JFrame{
                 direction = Direction.RIGHT;
             }
 
+            if(e.getKeyCode() == 80){ //D and Right arrow
+                if(gameState != GameState.PAUSE){
+                    gameState = GameState.PAUSE;
+                }else{
+                    gameState = GameState.PLAYING;
+                }
+
+            }
+
         }
     }
 
@@ -147,7 +160,7 @@ class RepaintTheBoard implements Runnable{
     private Board theBoard;
 
     //This delay will be used to speed up the game as time passed
-    private int threadDelay = 100; //0riginal = 100
+    private int threadDelay = 100; //Original = 100
     private int countTime = 0;
 
     //Constructor
@@ -158,27 +171,41 @@ class RepaintTheBoard implements Runnable{
     @Override
     public void run(){
 
-        theBoard.repaint();
+        //If the game is in the Playing state it should go as normal
+        if(Board.gameState == GameState.PLAYING){
 
-        try{
+            theBoard.repaint();
 
-            Thread.sleep(threadDelay);
+            try{
 
-        }
-        catch(InterruptedException e) { e.printStackTrace(); }
+                Thread.sleep(threadDelay);
 
-        //Meaning this is the fastest that the snake will go
-        if(threadDelay > 34){
+            }
+            catch(InterruptedException e) { e.printStackTrace(); }
 
-            //Want to decrement the delay every 4.6 seconds
-            //Meaning takes just about 5min to reach max speed
-            if(countTime == 46){
-                threadDelay--;
-                countTime = 0;
+            //Meaning this is the fastest that the snake will go
+            if(threadDelay > 34){
+
+                //Want to decrement the delay every 4.6 seconds
+                //Meaning takes just about 5min to reach max speed
+                if(countTime == 46){
+                    threadDelay--;
+                    countTime = 0;
+                }
+
             }
 
+            countTime++;
         }
+        else if(Board.gameState == GameState.DIED){
 
-        countTime++;
+            //Reset the value if the player died
+            threadDelay = 100; //Original = 100
+            countTime = 0;
+        }
+        //This will be the paused state
+        else{
+            //Do nada
+        }
     }
 }

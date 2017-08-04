@@ -54,12 +54,19 @@ class GameDrawingPanel extends JPanel {
         //See if the snake runs into itself
         if(theSnake.collideHeadBody()){
 
-            //Pause for a few seconds
+            //Update the game state
+            Board.gameState  = GameState.DIED;
+
+            //Pause for 1.5 seconds
             try {
-                Thread.sleep(3000);
+                Thread.sleep(1500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+            //Reset player score to 0 and update label
+            Board.getPlayer().setCurrentScore(0);
+            pnlScore.setLabelScore();
 
             //Make a new snake
             theSnake = new Snake();
@@ -71,6 +78,9 @@ class GameDrawingPanel extends JPanel {
 
             food.setULeftXPos(xFood);
             food.setULeftYPos(yFood);
+
+            //Change the state back to playing
+            Board.gameState  = GameState.PLAYING;
         }
 
         //Loop through the arraylist to draw the snake
