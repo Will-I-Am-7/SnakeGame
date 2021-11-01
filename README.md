@@ -1,4 +1,4 @@
 # SnakeGame
-Basic snake game that will make use of a a arraylist structure.
+Basic snake game written in Java
 
 Play using the WASD or Arrow keys. The 'P' button is used to pause the game.
